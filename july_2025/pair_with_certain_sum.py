@@ -28,3 +28,34 @@ findSumPairs.add(0, 1); // now nums2 = [2,4,5,4,5,4]
 findSumPairs.add(1, 1); // now nums2 = [2,5,5,4,5,4]
 findSumPairs.count(7);  // return 11; pairs (2,1), (2,2), (2,4), (3,1), (3,2), (3,4), (4,1), (4,2), (4,4) make 2 + 5 and pairs (5,3), (5,5) make 3 + 4
 """
+
+# complexity O(n1 + n2)
+from collections import defaultdict
+from typing import List
+
+class FindSumPairs:
+
+    def __init__(self, nums1: List[int], nums2: List[int]):
+        self.nums1 = nums1
+        self.nums2 = nums2
+
+        self.map2 = defaultdict(int)
+
+        for i in self.nums2: self.map2[i] += 1
+
+    def add(self, index: int, val: int) -> None:
+        self.map2[self.nums2[index]] -= 1
+        self.nums2[index] += val
+        self.map2[self.nums2[index]] += 1
+
+    def count(self, tot: int) -> int:
+        cnt = 0
+        for j in self.nums1:
+            curr = tot - j
+            if curr in self.map2: cnt += self.map2[curr]
+        return cnt
+
+obj = FindSumPairs([1, 2, 3], [3, 4])
+print(obj.count(6))   # Output: 2
+obj.add(1, 1)
+print(obj.count(6))   # Output: 2 
