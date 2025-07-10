@@ -22,3 +22,34 @@ Output: 2
 Explanation:
 Reschedule the meeting at [1, 2] to [2, 3], leaving no meetings during the time [0, 2].
 """
+
+#  complexity -> O(n)
+from typing import List
+
+class Solution:
+    def maxFreeTime(self, eventTime: int, startTime: List[int], endTime: List[int]) -> int:
+        n = len(startTime)
+        space = [False] * n
+
+        s1 =  0
+        for i in range(n):
+            if endTime[i] - startTime[i] <= s1: space[i] = True
+            s1 = max(s1, startTime[i] - (0 if i == 0 else endTime[i - 1]))
+        
+        s2 = 0
+        for i in range(n - 1, -1, -1):
+            if endTime[i] - startTime[i] <= s2: space[i] = True
+            s2 = max(s2,(eventTime if i == n - 1 else startTime[i + 1]) - endTime[i])
+        
+        res = 0
+        for i in range(n):
+            l = 0 if i == 0 else endTime[i - 1]
+            r = eventTime if i == n - 1 else startTime[i + 1]
+            if space[i]:
+                res = max(res, r - l)
+            else:
+                res = max(res, r - l - (endTime[i] - startTime[i]))
+
+        return res 
+
+print(Solution().maxFreeTime(5, [1,3], [2,5])) #output 2
