@@ -26,3 +26,30 @@ Explanation:
 Both rooms 0 and 1 held 2 meetings, so we return 0. 
 """
 
+import heapq
+from typing import List
+
+class Solution:
+    def mostBooked(self, n: int, meetings: List[List[int]]) -> int:
+        meetings.sort()
+        x = [i for i in range (n)]
+        used = []
+        count = [0] * n
+
+        for start, end in meetings:
+            while used and start >= used[0][0]:
+                _, room = heapq.heappop(used)
+                heapq.heappush(x, room)
+            
+            if not x:
+                endT,room = heapq.heappop(used)
+                end = endT + (end - start)
+                heapq.heappush(x, room)
+            
+            room = heapq.heappop(x)
+            heapq.heappush(used, (end, room))
+            count[room] += 1
+        
+        return count.index(max(count))
+
+print(Solution().mostBooked(2, [[0,10],[1,5],[2,7],[3,4]])) # Output: 0
