@@ -34,6 +34,8 @@ Third round: 1, 2, 4
 Fourth round: 2, 4
 """
 
+# complexity -> O(2^n)
+
 from functools import cache
 from itertools import product
 from typing import List
