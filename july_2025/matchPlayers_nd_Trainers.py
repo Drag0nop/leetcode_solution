@@ -17,3 +17,26 @@ One of the ways we can form two matchings is as follows:
 - players[1] can be matched with trainers[3] since 7 <= 8.
 It can be proven that 2 is the maximum number of matchings that can be formed.
 """
+
+# complexity ->  O(nlogn + mlogm)
+
+from typing import List
+
+class Solution:
+    def matchPlayersAndTrainers(self, players: List[int], trainers: List[int]) -> int:
+        players.sort()
+        trainers.sort()
+        i = j = 0
+        cnt = 0
+    
+        while i < len(players) and j < len(trainers):
+            if players[i] <= trainers[j]:
+                cnt += 1
+                i += 1
+                j += 1
+            else:
+                j += 1
+            
+        return cnt
+
+print(Solution().matchPlayersAndTrainers([4,7,9], [8,2,5,8]))  # Output: 2
