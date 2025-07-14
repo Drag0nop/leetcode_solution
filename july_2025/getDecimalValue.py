@@ -38,6 +38,5 @@ def create_linked_list(values):
 binary_digits = [1, 0, 1]  # Binary 101
 head = create_linked_list(binary_digits)
 
-# Run the solution
 sol = Solution()
 print(sol.getDecimalValue(head)) # Output: 5
