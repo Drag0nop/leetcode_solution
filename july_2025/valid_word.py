@@ -25,3 +25,26 @@ Explanation:
 This word satisfies the conditions.
 """
 
+class Solution:
+    def isValid(self, word: str) -> bool:
+        if len(word) < 3:
+            return False
+        
+        vowels = "aeiouAEIOU"
+        cnt = False
+        n = False
+        for j in word:
+            if j.isdigit():
+                continue
+            elif j.isalpha():
+                if j in vowels:
+                    cnt = True
+                else:
+                    n = True
+            else:
+                return False
+        
+        return cnt and n
+
+s = Solution()
+print(s.isValid("aya"))  # Output: True
