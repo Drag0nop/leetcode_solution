@@ -23,4 +23,4 @@ class Solution:
         return strs[0]
 
 s = Solution()
-print(s.longestCommonPrefix(["flower", "flow", "flight"]))  # output "
+print(s.longestCommonPrefix(["flower", "flow", "flight"]))  # output "fl"
