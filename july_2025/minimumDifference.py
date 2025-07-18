@@ -22,12 +22,43 @@ Thus we have to remove 1 element from nums and divide the array into two equal p
 - If we remove nums[2] = 2, the array will be [3,1]. The difference in sums of the two parts will be 3 - 1 = 2.
 The minimum difference between sums of the two parts is min(-1,1,2) = -1.
 """
-
+import heapq
+import math
 from typing import List
 
 class Solution:
     def minimumDifference(self, nums: List[int]) -> int:
-        return min(nums) - max(nums) if len(nums) > 2 else -1
+        n = len(nums)
+        n1 = n // 3
+        t1 = sum(nums[:n1])
+        max_hp = [-x for x in nums[:n1]]
+        heapq.heapify(max_hp)
+        p1 = [0] * n
+        p1[n1 - 1] = t1
+
+        for i in range(n1, n1 * 2):
+            t1 += nums[i]
+            heapq.heappush(max_hp, -nums[i])
+            t1 -= -heapq.heappop(max_hp)
+            p1[i] = t1
+
+        t2 = sum(nums[-n1:])
+        min_hp = nums[-n1:]
+        heapq.heapify(min_hp)
+        p2 = [0] * n
+        p2[n1 * 2] = t2
+
+        for i in range(n1 * 2 - 1, n1 - 1, -1):
+            t2 += nums[i]
+            heapq.heappush(min_hp, nums[i])
+            t2 -= heapq.heappop(min_hp)
+            p2[i] = t2
+        
+        res = float('inf')
+        for i in range(n1 - 1, n1 * 2):
+            res = min(res, p1[i] - p2[i + 1])
+        
+        return res
 
 s = Solution()
 print(s.minimumDifference([3, 1, 2]))  # Output: -1
