@@ -13,6 +13,9 @@ Output: ["/a","/c/d","/c/f"]
 Explanation: Folders "/a/b" is a subfolder of "/a" and "/c/d/e" is inside of folder "/c/d" in our filesystem.
 """
 
+# Time complexity: O(n log n) for sorting.
+# Space complexity: O(n) for storing the result.
+
 from typing import List
 
 class Solution:
