@@ -22,29 +22,105 @@ Explanation: The file structure is as shown.
 Folders "/a" and "/c" (and their subfolders) are marked for deletion because they both contain an empty
 folder named "b".
 """
-from typing import List, Dict, Set
+
+from typing import List, Dict
+from collections import defaultdict
+
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.name = ""
+        self.to_delete = False
 
 class Solution:
     def deleteDuplicateFolder(self, paths: List[List[str]]) -> List[List[str]]:
-        folder_map: Dict[str, Set[str]] = {}
+        root = TrieNode()
+        
+        # Step 1: Build Trie
         for path in paths:
-            folder = '/'.join(path)
-            folder_map[folder] = set(path)
+            node = root
+            for i in path:
+                if i not in node.children:
+                    node.children[i] = TrieNode()
+                    node.children[i].name = i
+                node = node.children[i]
 
-        marked_folders = set()
-        for folder1 in folder_map:
-            if folder1 in marked_folders:
-                continue
-            for folder2 in folder_map:
-                if folder1 != folder2 and folder_map[folder1] == folder_map[folder2]:
-                    marked_folders.add(folder2)
+        # Step 2: Serialize subtrees and find duplicates
+        sub_map = defaultdict(list)
+        
+        def serialize(node):
+            if not node.children:
+                return ""
+            serial = []
+            for child in sorted(node.children):
+                serial.append(child + "(" + serialize(node.children[child]) + ")")
+            s = "".join(serial)
+            sub_map[s].append(node)
+            return s
 
-        result = []
-        for path in paths:
-            if '/'.join(path) not in marked_folders:
-                result.append(path)
+        serialize(root)
 
-        return result
+        # Step 3: Mark duplicates for deletion
+        for nodes in sub_map.values():
+            if len(nodes) > 1:
+                for node in nodes:
+                    node.to_delete = True
+
+        # Step 4: Collect result
+        res = []
+
+        def dfs(node, path):
+            for name, child in node.children.items():
+                if not child.to_delete:
+                    res.append(path + [name])
+                    dfs(child, path + [name])
+
+        dfs(root, [])
+        return res
+
 
 s = Solution()
 print(s.deleteDuplicateFolder([["a"],["c"],["d"],["a","b"],["c","b"],["d","a"]]))
+
+
+"""
+class Solution:
+    def deleteDuplicateFolder(self, paths: List[List[str]]) -> List[List[str]]:
+        tree = {}
+        for path in paths:
+            node = tree
+            for folder in path:
+                node = node.setdefault(folder, {})
+        
+        duplicates = defaultdict(list)
+
+        def serialize(node):
+            if not node:
+                return "()"
+
+            child_s = "".join(child + serialize(child_node) for child, child_node in sorted(node.items()))
+
+            serial = "(" + child_s + ")"
+            duplicates[serial].append(node)
+            return serial
+        
+        serialize(tree)
+
+        for nodes in duplicates.values():
+            if len(nodes) > 1:
+                for node in nodes:
+                    node.clear()
+                    node["#"] = True
+        
+        ret = []
+        def collect_paths(node, path):
+            for child_name, child_node in node.items():
+                if "#" in child_node:
+                    continue
+                new_path = path + [child_name]
+                ret.append(new_path)
+                collect_paths(child_node, new_path)
+        
+        collect_paths(tree, [])
+        return ret
+"""
