@@ -32,8 +32,6 @@ class Solution:
                     stack.append(c)
             return "".join(stack), score
 
-        total_score = 0
-
         # Remove the more valuable pair first
         if x > y:
             s, score1 = remove_pair(s, 'a', 'b', x)
