@@ -23,9 +23,9 @@ Explanation: The diagram above shows a way to make a pair of removals.
 The score is the difference between the largest and smallest XOR value which is 10 - 1 = 9.
 It can be shown that no other pair of removals will obtain a smaller score than 9.
 """
-from typing import List, Tuple
+
 from collections import defaultdict
-from itertools import combinations
+from typing import List
 
 class Solution:
     def minimumScore(self, nums: List[int], edges: List[List[int]]) -> int:
@@ -33,43 +33,61 @@ class Solution:
         graph = defaultdict(list)
         
         # Build the graph
-        for a, b in edges:
-            graph[a].append(b)
-            graph[b].append(a)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        xor = [0] * n
+        parent = [-1] * n
+        in_time = [0] * n
+        out_time = [0] * n
+        time = 0
 
-        # Function to calculate the XOR of a component
-        def dfs(node: int, visited: set) -> int:
-            visited.add(node)
-            val = nums[node]
+        # DFS to compute XOR values, parent, and Euler in/out time
+        def dfs(node: int, par: int):
+            nonlocal time
+            in_time[node] = time
+            time += 1
+
+            xor[node] = nums[node]
+            parent[node] = par
             for i in graph[node]:
-                if i not in visited:
-                    val ^= dfs(i, visited)
-            return val
+                if i == par:
+                    continue
+                dfs(i, node)
+                xor[node] ^= xor[i]
 
-        min_score = float('inf')
+            out_time[node] = time
+            time += 1
 
-        # Try all pairs of edges to remove
-        for (a1, b1), (a2, b2) in combinations(edges, 2):
-            # Remove edges a1-b1 and a2-b2
-            visited = set()
-            val = []
-            
-            # Calculate the XOR for the first component
-            val.append(dfs(a1, visited))
-            val.append(dfs(b1, visited))
-            
-            # Calculate the XOR for the second component
-            val.append(dfs(a2, visited))
-            val.append(dfs(b2, visited))
-            
-            # Get the max and min XOR values
-            max_xor = max(val)
-            min_xor = min(val)
-            
-            # Update the minimum score
-            min_score = min(min_score, max_xor - min_xor)
+        dfs(0, -1)
 
-        return min_score
+        total = xor[0]
+        res = float('inf')
+
+        # Check if u is an ancestor of v
+        def is_ancestor(u: int, v: int) -> bool:
+            return in_time[u] <= in_time[v] and out_time[v] <= out_time[u]
+
+        # Try all pairs of nodes (which are endpoints of edges to remove)
+        for i in range(1, n):
+            for j in range(i + 1, n):
+                if is_ancestor(i, j):
+                    a = xor[j]
+                    b = xor[i] ^ xor[j]
+                    c = total ^ xor[i]
+                elif is_ancestor(j, i):
+                    a = xor[i]
+                    b = xor[j] ^ xor[i]
+                    c = total ^ xor[j]
+                else:
+                    a = xor[i]
+                    b = xor[j]
+                    c = total ^ xor[i] ^ xor[j]
+
+                res = min(res, max(a, b, c) - min(a, b, c))
+
+        return res
 
 s = Solution()
 print(s.minimumScore([1,5,5,4,11], [[0,1],[1,2],[1,3],[3,4]]))  # Output: 9
