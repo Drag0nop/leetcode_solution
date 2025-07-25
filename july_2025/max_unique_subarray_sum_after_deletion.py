@@ -20,21 +20,14 @@ from typing import List
 
 class Solution:
     def maxSum(self, nums: List[int]) -> int:
-        seen = set()
-        max_sum = 0
-        current_sum = 0
-        start = 0
-        
-        for i in range(len(nums)):
-            while nums[i] in seen:
-                seen.remove(nums[start])
-                current_sum -= nums[start]
-                start += 1
-            seen.add(nums[i])
-            current_sum += nums[i]
-            max_sum = max(max_sum, current_sum)
-        
-        return max_sum
+        n = len(nums)
+        all = set(nums)
+        mx = max(all)
+        all.remove(mx)
+        res = mx
+        for i in all:
+            res = max(res, res + i)
+        return res
 
 s = Solution()
 print(s.maxSum([1, 2, 3, 4, 5]))
