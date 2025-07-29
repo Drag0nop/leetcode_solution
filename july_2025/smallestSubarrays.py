@@ -1,0 +1,52 @@
+"""
+You are given a 0-indexed array nums of length n, consisting of non-negative integers. For each index i from 0 to n - 1, you must determine the size of the minimum sized non-empty subarray of nums starting at i (inclusive) that has the maximum possible bitwise OR.
+
+In other words, let Bij be the bitwise OR of the subarray nums[i...j]. You need to find the smallest subarray starting at i, such that bitwise OR of this subarray is equal to max(Bik) where i <= k <= n - 1.
+The bitwise OR of an array is the bitwise OR of all the numbers in it.
+
+Return an integer array answer of size n where answer[i] is the length of the minimum sized subarray starting at i with maximum bitwise OR.
+
+A subarray is a contiguous non-empty sequence of elements within an array.
+
+Example :
+
+Input: nums = [1,0,2,1,3]
+Output: [3,3,2,2,1]
+Explanation:
+The maximum possible bitwise OR starting at any index is 3. 
+- Starting at index 0, the shortest subarray that yields it is [1,0,2].
+- Starting at index 1, the shortest subarray that yields the maximum bitwise OR is [0,2,1].
+- Starting at index 2, the shortest subarray that yields the maximum bitwise OR is [2,1].
+- Starting at index 3, the shortest subarray that yields the maximum bitwise OR is [1,3].
+- Starting at index 4, the shortest subarray that yields the maximum bitwise OR is [3].
+Therefore, we return [3,3,2,2,1].
+"""
+
+from typing import List
+
+class Solution:
+    def smallestSubarrays(self, nums: List[int]) -> List[int]:
+        n = len(nums)
+        res = [0] * n
+        max_or = 0
+        last_seen = {}
+
+        for i in range(n - 1, -1, -1):
+            max_or |= nums[i]
+            last_seen[nums[i]] = i
+            
+            min_len = float('inf')
+            current_or = 0
+            
+            for j in range(i, n):
+                current_or |= nums[j]
+                if current_or == max_or:
+                    min_len = min(min_len, j - i + 1)
+                    break
+            
+            res[i] = min_len
+        
+        return res
+
+s = Solution()
+print(s.smallestSubarrays([1, 0, 2, 1, 3]))  # output: [3, 3, 2, 2, 1]
