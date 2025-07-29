@@ -27,25 +27,17 @@ from typing import List
 class Solution:
     def smallestSubarrays(self, nums: List[int]) -> List[int]:
         n = len(nums)
-        res = [0] * n
-        max_or = 0
-        last_seen = {}
+        res = [1] * n
+        last = [0] * 32  # last seen position for each bit (0 to 31)
 
         for i in range(n - 1, -1, -1):
-            max_or |= nums[i]
-            last_seen[nums[i]] = i
-            
-            min_len = float('inf')
-            current_or = 0
-            
-            for j in range(i, n):
-                current_or |= nums[j]
-                if current_or == max_or:
-                    min_len = min(min_len, j - i + 1)
-                    break
-            
-            res[i] = min_len
-        
+            for bit in range(32):
+                if nums[i] & (1 << bit):
+                    last[bit] = i
+            farthest = i
+            for bit in range(32):
+                farthest = max(farthest, last[bit])
+            res[i] = farthest - i + 1
         return res
 
 s = Solution()
