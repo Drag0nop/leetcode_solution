@@ -1,3 +1,5 @@
+# 3480. Maximize Subarrays After Removing One Conflicting Pair
+
 """
 You are given an integer n which represents an array nums containing the numbers from 1 to n in order. Additionally, you are given a 2D array conflictingPairs, 
 where conflictingPairs[i] = [a, b] indicates that a and b form a conflicting pair.

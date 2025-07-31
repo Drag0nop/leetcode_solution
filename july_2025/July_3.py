@@ -1,3 +1,5 @@
+# 3304. Find the K-th Character in String Game I
+
 """
 Alice and Bob are playing a game. Initially, Alice has a string word = "a".
 You are given a positive integer k.

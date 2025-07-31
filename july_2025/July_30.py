@@ -1,3 +1,5 @@
+# 2419. Longest Subarray With Maximum Bitwise AND
+
 """
 You are given an integer array nums of size n.
 

@@ -1,3 +1,5 @@
+# 2411. Smallest Subarrays With Maximum Bitwise OR
+
 """
 You are given a 0-indexed array nums of length n, consisting of non-negative integers. For each index i from 0 to n - 1, you must determine the size of the minimum sized non-empty subarray of nums starting at i (inclusive) that has the maximum possible bitwise OR.
 

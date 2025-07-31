@@ -1,3 +1,5 @@
+# 1957. Delete Characters to Make Fancy String
+
 """
 A fancy string is a string where no three consecutive characters are equal.
 
