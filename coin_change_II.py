@@ -1,3 +1,4 @@
+# Problem: Coin Change II (LC -> 518)
 """
 You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
 Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
@@ -16,8 +17,18 @@ Explanation: there are four ways to make up the amount:
 """
 
 from typing import List
-
+# By DP method
 class Solution:
+    def change(self, amount: int, coins: List[int]) -> int:
+        dp =[0]*(amount+1)
+        dp[0] = 1
+        for coin in coins:
+            for x in range(coin, amount+1):
+                dp[x] += dp[x - coin]
+        return dp[amount]
+
+# By DFS + Memoization method
+class Soln:
     def change(self, amount: int, coins: List[int]) -> int:
         cache = {}
         def dfs(i,a):
@@ -34,4 +45,6 @@ class Solution:
         return dfs(0,0)
 
 sol = Solution()
+soln2 = Soln()
 print(sol.change(5, [1,2,5]))  # Output: 4
+print(soln2.change(5, [1,2,5]))  # Output: 4
