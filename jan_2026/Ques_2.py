@@ -1,5 +1,8 @@
 # 961. N-Repeated Element in Size 2N Array
 
+# Complexity Analysis
+# Time Complexity: O(N log N) due to sorting the array.
+
 from typing import List
 
 class Solution:
