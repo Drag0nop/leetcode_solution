@@ -33,12 +33,6 @@ class Solution:
         return res
 
 # Example usage:
-# Constructing the binary tree:
-#       1
-#      / \
-#     7   0
-#    / \
-#   7   -8
 root = TreeNode(1)
 root.left = TreeNode(7)
 root.right = TreeNode(0)
