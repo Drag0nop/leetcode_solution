@@ -1,6 +1,7 @@
 # 1895. Largest Magic Square
 
 # Complexity Analysis:
+# Time Complexity: O(Min(M,N)∗M∗N∗(M+N))
 
 from typing import List
 
