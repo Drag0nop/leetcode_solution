@@ -4,7 +4,7 @@
 
 def is_monotonic(arr):
     n = len(arr)
-    if n == 1: return True
+    if n <= 1: return True
 
     for i in range(1, n):
         if arr[i] < arr[i - 1]: break

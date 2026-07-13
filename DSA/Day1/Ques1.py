@@ -3,6 +3,7 @@
 
 def sorted_squared_array(arr):
     res = [0] * len(arr)
+    if len(arr) == 0: return res
     left, right = 0, len(arr) - 1
     while left <= right:
         left_square = arr[left] ** 2
