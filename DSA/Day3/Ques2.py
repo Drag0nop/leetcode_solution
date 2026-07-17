@@ -15,3 +15,32 @@
 # 5.Else, the last friend in the circle wins the game.
 
 # Given the number of friends, n, and an integer k, return the winner of the game.
+
+# Type 1: Using recursion:
+def josephus(n, k):
+    if n == 1:
+        return 1
+    return (josephus(n - 1, k) + k - 1) % n + 1
+
+# Type 2: Using iteration:
+def josephus(n, k):
+    res = 0
+    for i in range(2, n + 1):
+        res = (res + k) % i
+    return res + 1
+
+# Type 3: Using list to simulate the process:
+def josephus(n, k):
+    res = [i for i in range(1, n + 1)]
+    temp = 0
+    while len(res) != 1:
+        num = (temp + k - 1) % len(res)
+        res.pop(num)
+        temp = num
+    return res[0]
+
+
+# Example usage:
+n = 5
+k = 2
+print(josephus(n, k))  # Output: 3 
