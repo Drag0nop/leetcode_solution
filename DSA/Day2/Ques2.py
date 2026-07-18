@@ -1,25 +1,46 @@
-# Container with most Water - You are given an integer array height of length n. 
-# There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). 
-# Find two lines that together with the x-axis form a container, such that the container contains the most water(depth is constant across containers). 
-# Return the area(that the 2 lines and the X axis make) of container which can store the max amount of water. 
-# Notice that you may not slant the container.
+# Josephus problem: There are n friends that are playing a game. 
+# The friends are sitting in a circle and are numbered from 1 to n in clockwise order. 
+# More formally, moving clockwise from the ith friend brings you to the (i+1)th friend for 1 <= i < n, and 
+# moving clockwise from the nth friend brings you to the 1st friend.
 
-def maxArea(height):
-    left = 0
-    right = len(height) - 1
-    max_area = 0
+# The rules of the game are as follows:
+# 1.Start at the 1st friend.
+# 2.Count the next k friends in the clockwise direction including the friend you started at. 
+# The counting wraps around the circle and may count some friends more than once.
 
-    while left < right:
-        width = right - left
-        current_area = width * (min(height[left], height[right]))
-        max_area = max(max_area, current_area)
-        if height[left] < height[right]:
-            left += 1
-        else:
-            right -= 1
+# 3.The last friend you counted leaves the circle and loses the game.
+# 4.If there is still more than one friend in the circle, 
+# go back to step 2 starting from the friend immediately clockwise of the friend who just lost and repeat.
 
-    return max_area
+# 5.Else, the last friend in the circle wins the game.
+
+# Given the number of friends, n, and an integer k, return the winner of the game.
+
+# Type 1: Using recursion:
+def josephus(n, k):
+    if n == 1:
+        return 1
+    return (josephus(n - 1, k) + k - 1) % n + 1
+
+# Type 2: Using iteration:
+def josephus(n, k):
+    res = 0
+    for i in range(2, n + 1):
+        res = (res + k) % i
+    return res + 1
+
+# Type 3: Using list to simulate the process:
+def josephus(n, k):
+    res = [i for i in range(1, n + 1)]
+    temp = 0
+    while len(res) != 1:
+        num = (temp + k - 1) % len(res)
+        res.pop(num)
+        temp = num
+    return res[0]
+
 
 # Example usage:
-height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
-print(maxArea(height))  # Output: 49
+n = 5
+k = 2
+print(josephus(n, k))  # Output: 3 

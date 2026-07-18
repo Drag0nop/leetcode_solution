@@ -1,15 +1,20 @@
-# Rotate Array - Given an array, rotate the array to the right by k steps, 
-# where k is non-negative.
+# k-th symbol in Grammar: We build a table of n rows (1-indexed). 
+# We start by writing 0 in the 1st row. Now in every subsequent row, 
+# we look at the previous row and replace each occurrence of 0 with 01, and each occurrence of 1 with 10.
 
-def rotate(nums, k):
-    n = len(nums)
-    k = k % n  # In case k is greater than n
-    nums[:] = nums[-k:] + nums[:-k]  # Rotate the array in place
-    return nums
+# For example, for n = 3, the 1st row is 0, the 2nd row is 01, and the 3rd row is 0110.
+
+# Given two integer n and k, return the kth (1-indexed) symbol in the nth row of a table of n rows.
+
+def kthGrammar(n: int, k: int) -> int:
+    if n == 1: return 0
+    length = 2 ** (n - 2)
+    if k <= length:
+        return kthGrammar(n - 1, k)
+    else:
+        return 1 - kthGrammar(n - 1, k - length)
 
 # Example usage:
-nums = [1, 2, 3, 4, 5, 6, 7]
-k = 3
-print(rotate(nums, k))  # Output: [5, 6, 7, 1, 2, 3, 4]
-# time complexity: O(n)
-# space complexity: O(1)
+n = 4
+k = 1
+print(kthGrammar(n, k))
