@@ -4,3 +4,13 @@
 # You can either start from the step with index 0, or the step with index 1.
 
 # Return the minimum cost to reach the top of the floor.
+
+def minCost(cost):
+    cost.append(0)
+    for i in range(len(cost) - 4, -1, -1):
+        cost[i] += min(cost[i + 1], cost[i + 2])
+    return min(cost[0], cost[1])
+
+# Example Usage:
+cost = [10, 15, 20]
+print(minCost(cost))
