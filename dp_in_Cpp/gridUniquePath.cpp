@@ -3,33 +3,33 @@ using namespace std;
 
 // Time Complexity: O(2^(m+n))
 // Space Complexity: O(m+n) for recursion stack
-int recursionUniquePaths(int m, int n, int i, int j) {
-    if(i == m - 1 && j == n - 1) {
+int recursionUniquePaths(int m, int n) {
+    if(m == 1 && n == 1) {
         return 1;
     }
-    if(i >= m || j >= n) {
+    if(m <= 0 || n <= 0) {
         return 0;
     }
-    int left = recursionUniquePaths(m, n, i + 1, j);
-    int right = recursionUniquePaths(m, n, i, j + 1);
+    int left = recursionUniquePaths(m - 1, n);
+    int right = recursionUniquePaths(m, n - 1);
     return left + right;
 }
 
 // Time Complexity: O(m*n)
 // Space Complexity: O(m*n) for dp array + O(m+n) for recursion stack
-int memorizationUniquePaths(int m, int n, int i, int j, vector<vector<int>>& dp) {
-    if(i == m - 1 && j == n - 1) {
+int memorizationUniquePaths(int m, int n, vector<vector<int>>& dp) {
+    if(m == 1 && n == 1) {
         return 1;
     }
-    if(i >= m || j >= n) {
+    if(m <= 0 || n <= 0) {
         return 0;
     }
-    if(dp[i][j] != -1) {
-        return dp[i][j];
+    if(dp[m - 1][n - 1] != -1) {
+        return dp[m - 1][n - 1];
     }
-    int left = memorizationUniquePaths(m, n, i + 1, j, dp);
-    int right = memorizationUniquePaths(m, n, i, j + 1, dp);
-    return dp[i][j] = left + right;
+    int left = memorizationUniquePaths(m - 1, n, dp);
+    int right = memorizationUniquePaths(m, n - 1, dp);
+    return dp[m - 1][n - 1] = left + right;
 }
 
 // Time Complexity: O(m*n)
@@ -40,8 +40,13 @@ int tabulationUniquePaths(int m, int n) {
     for(int i = 0; i < m; i++) {
         for(int j = 0; j < n; j++) {
             if(i == 0 && j == 0) continue;
-            int left = (i > 0) ? dp[i - 1][j] : 0;
-            int right = (j > 0) ? dp[i][j - 1] : 0;
+            int left = 0, right = 0;
+            if (i > 0) {
+                left = dp[i - 1][j];
+            }
+            if (j > 0) {
+                right = dp[i][j - 1];
+            }
             dp[i][j] = left + right;
         }
     }
@@ -59,8 +64,13 @@ int optimizedTabulationUniquePaths(int m, int n) {
             if(i == 0 && j == 0) {
                 temp[j] = 1;
             } else {
-                int left = (i > 0) ? dp[j] : 0;
-                int right = (j > 0) ? temp[j - 1] : 0;
+                int left = 0, right = 0;
+                if (i > 0) {
+                    left = dp[j];
+                }
+                if (j > 0) {
+                    right = temp[j - 1];
+                }
                 temp[j] = left + right;
             }
         }
@@ -71,9 +81,9 @@ int optimizedTabulationUniquePaths(int m, int n) {
 int main() {
     int m, n;
     cin >> m >> n;
-    cout << recursionUniquePaths(m, n, 0, 0) << endl;
+    cout << recursionUniquePaths(m, n) << endl;
     vector<vector<int>> dp(m, vector<int>(n, -1));
-    cout << memorizationUniquePaths(m, n, 0, 0, dp) << endl;
+    cout << memorizationUniquePaths(m, n, dp) << endl;
     cout << tabulationUniquePaths(m, n) << endl;
     cout << optimizedTabulationUniquePaths(m, n) << endl;
     return 0;
