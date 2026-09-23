@@ -46,7 +46,9 @@ bool tabulation(int n, int target, vector<int>& arr) {
 bool optimized(int n, int target, vector<int>& arr) {
     vector<bool> prev(target + 1, 0), curr(target + 1, 0);
     prev[0] = curr[0] = true;
-    prev[arr[0]] = true;
+    if (arr[0] <= target) {
+        prev[arr[0]] = true;
+    }
     for (int ind = 1; ind < n; ind++) {
         for (int t = 1; t <= target; t++) {
             bool notTake = prev[t];
